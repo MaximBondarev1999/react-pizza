@@ -1,0 +1,31 @@
+.input {
+   border: 1px solid rgba(0, 0, 0, 0.1);
+   padding: 12px 20px;
+   width: 300px;
+   border-radius: 10px;
+   font-size: 16px;
+   position: relative;
+   padding-left: 40px;
+}
+
+
+.search {
+   position: relative;
+   width: 25px;
+   height: 25px;
+   top: 8px;
+   left: 35px;
+   z-index: 2;
+   opacity: 0.5;
+}
+
+.close {
+   position: relative;
+   width: 25px;
+   height: 25px;
+   top: 8px;
+   z-index: 2;
+   right: 35px;
+   opacity: 0.5;
+
+}
