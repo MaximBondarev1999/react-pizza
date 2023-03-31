@@ -1,36 +1,91 @@
 import axios from "axios"
 import { nanoid } from "nanoid"
-import { useEffect, useState } from "react"
+import qs from "qs"
+import { useEffect, useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { setCategoryId } from "../../redux/slices/filterSlice"
-
+import { useNavigate } from "react-router-dom"
+import { setCategoryId, setFilters } from "../../redux/slices/filterSlice"
 import Categories from "../Categories"
 import PizzaBlock from "../PizzaBlock/PizzaBlock"
 import Skeleton from "../PizzaBlock/Skeleton"
-import Sort from "../Sort"
+import Sort, { sortPosition } from "../Sort"
 
 
 const Home = ({ searchValue }) => {
+   const navigate = useNavigate()
    const dispatch = useDispatch()
+   const isSearch = useRef(false)
+   const isMaunted = useRef(false)
+
+
    const categoryId = useSelector((state) => state.filter.categoryId)
    const sortType = useSelector((state) => state.filter.sort.sortProperty);
+
    const [items, setItems] = useState([])
-   const [loaning, setLoaning] = useState(true)
+   const [loaning, setLoaning] = useState(false)
 
 
    const onChangeCategory = (id) => {
       dispatch(setCategoryId(id))
    }
 
-   useEffect(() => {
-      setLoaning(true)
-      axios.get(`https://63e7a4f1bb28627977157a40.mockapi.io/items${categoryId > 0 ? '?category=' + categoryId : '?'}&sortBy=${sortType}&order=asc`)
+   const fetchPizzas = () => {
+      setLoaning(true);
+      axios
+         .get(
+            `https://63e7a4f1bb28627977157a40.mockapi.io/items${categoryId > 0 ? '?category=' + categoryId : '?'}&sortBy=${sortType}&order=asc`,
+
+         )
          .then((res) => {
-            setItems(res.data)
-            setLoaning(false)
-         })
+            setItems(res.data);
+            setLoaning(false);
+         });
+
+   };
+
+   useEffect(() => {
+      if (isMaunted.current) {
+         const queryString = qs.stringify({
+            categoryId,
+            sortType
+         });
+         navigate(`?${queryString}`)
+         if (sortType === 'rating' && categoryId === 0) {
+            navigate('')
+         }
+      }
+      isMaunted.current = true
+   }, [categoryId, sortType])
+
+
+   useEffect(() => {
+      if (window.location.search) {
+         const params = qs.parse(window.location.search.substring(1))
+
+         const sort = sortPosition.find(obj => obj.sortProperty === params.sortType)
+
+
+         dispatch(setFilters({
+            ...params,
+            sort,
+         }))
+         isSearch.current = true
+      }
+   }, [])
+
+
+
+
+   useEffect(() => {
+
+      //
+      if (!isSearch.current) {
+         fetchPizzas();
+      }
+      isSearch.current = false
       window.scroll(0, 0)
    }, [categoryId, sortType])
+
 
 
 

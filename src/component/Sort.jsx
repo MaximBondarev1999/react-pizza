@@ -5,17 +5,18 @@ import { setSort } from "../redux/slices/filterSlice";
 
 
 
+export const sortPosition =
+  [{ name: 'Популярности', sortProperty: 'rating' },
+  { name: 'Цене', sortProperty: 'price' },
+  { name: 'Алфавиту', sortProperty: 'title' },]
+
 const Sort = () => {
   const dispatch = useDispatch();
   const sortActive = useSelector((state) => state.filter.sort);
 
   const [sortOpen, setSortOpen] = useState(0)
   const [open, setOpen] = useState(false);
-  const [sortPosition, setSortPosition] = useState(
-    [{ name: 'Популярности', sortProperty: 'rating' },
-    { name: 'Цене', sortProperty: 'price' },
-    { name: 'Алфавиту', sortProperty: 'title' },]
-  )
+
 
   const onClikiListItem = (obj, i) => {
     dispatch(setSort(obj))
