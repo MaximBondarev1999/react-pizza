@@ -57,7 +57,6 @@ const Home = ({ searchValue }) => {
       isMaunted.current = true
    }, [categoryId, sortType])
 
-
    useEffect(() => {
       if (window.location.search) {
          const params = qs.parse(window.location.search.substring(1))
@@ -95,7 +94,7 @@ const Home = ({ searchValue }) => {
       }
 
       return false;
-   }).map(item => <PizzaBlock key={nanoid()} title={item.title} price={item.price} imageUrl={item.imageUrl} sizes={item.sizes} types={item.types} />)
+   }).map(item => <PizzaBlock key={nanoid()} title={item.title} price={item.price} imageUrl={item.imageUrl} sizes={item.sizes} id={item.id} types={item.types} />)
 
    return (
       <div className="content">

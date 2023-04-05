@@ -1,46 +1,68 @@
-import { nanoid } from 'nanoid'
 import { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { addItems } from '../../redux/slices/cartSlice'
 
-export const PizzaBlock = (props) => {
-  const [pizzaCount, setPizzaCount] = useState(0)
+
+export const PizzaBlock = ({ id, title, price, imageUrl, sizes, types, rating }) => {
+  const dispatch = useDispatch()
+  const cartItem = useSelector((state) => state.cart.items.find((obj) => obj.id === id))
+  const typeNames = ['тонкое', 'традиционное']
+  // const [pizzaCount, setPizzaCount] = useState(0)
   const [sizeActive, setSizeActive] = useState(0)
   const [typeActive, setTypeActive] = useState(0)
-  function addPizzaCount() {
-    setPizzaCount(pizzaCount + 1)
+  // console.log(id)
+
+  const addedCount = cartItem ? cartItem.count : 0
+  // console.log(addedCount)
+
+  const onClickAdd = () => {
+    const item = {
+      id,
+      title,
+      price,
+      imageUrl,
+      types: typeNames[typeActive],
+      sizes: sizes[sizeActive],
+    }
+    dispatch(addItems(item))
   }
+
+  // function addPizzaCount() {
+  //   setPizzaCount(pizzaCount + 1)
+  // }
   // console.log(typeNames.props.types)
-  const typeNames = ['тонкое', 'традиционное']
+
   return (
     <div className="pizza-block__component">
       <div className="pizza-block">
         <img
           className="pizza-block__image"
-          src={props.imageUrl}
+          src={imageUrl}
           alt="Pizza"
         />
-        <h4 className="pizza-block__title">{props.title}</h4>
+        <h4 className="pizza-block__title">{title}</h4>
         <div className="pizza-block__selector">
           <ul>
-            {props.types.map((type, i) =>
+            {types.map((type, i) =>
               <li
-                key={nanoid()}
+                key={type}
                 className={typeActive == i ? 'active' : ''}
                 onClick={() => setTypeActive(i)}
               >{typeNames[type]}</li>
             )}
           </ul>
           <ul>
-            {props.sizes.map((size, index) =>
+            {sizes.map((size, index) =>
               <li
-                key={nanoid()}
+                key={size}
                 className={sizeActive == index ? 'active' : ''}
                 onClick={() => setSizeActive(index)}>{size}</li>
             )}
           </ul>
         </div>
         <div className="pizza-block__bottom">
-          <div className="pizza-block__price">от {props.price} ₽</div>
-          <button onClick={() => addPizzaCount()} className="button button--outline button--add">
+          <div className="pizza-block__price">от {price} ₽</div>
+          <button onClick={onClickAdd} className="button button--outline button--add">
             <svg
               width="12"
               height="12"
@@ -54,7 +76,8 @@ export const PizzaBlock = (props) => {
               />
             </svg>
             <span>Добавить</span>
-            <i>{pizzaCount}</i>
+            {/* {addedCount > 0 && <i>{pizzaCount}</i>} */}
+            <i>{addedCount}</i>
           </button>
         </div>
         <div />
