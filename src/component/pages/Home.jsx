@@ -1,10 +1,10 @@
-import axios from "axios"
 import { nanoid } from "nanoid"
 import qs from "qs"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { setCategoryId, setFilters } from "../../redux/slices/filterSlice"
+import { fetchPizzas } from "../../redux/slices/pizzasSlice"
 import Categories from "../Categories"
 import PizzaBlock from "../PizzaBlock/PizzaBlock"
 import Skeleton from "../PizzaBlock/Skeleton"
@@ -16,30 +16,33 @@ const Home = ({ searchValue }) => {
    const dispatch = useDispatch()
    const isSearch = useRef(false)
    const isMaunted = useRef(false)
-
+   const { items, status } = useSelector((state) => state.pizza)
 
    const categoryId = useSelector((state) => state.filter.categoryId)
    const sortType = useSelector((state) => state.filter.sort.sortProperty);
 
-   const [items, setItems] = useState([])
-   const [loaning, setLoaning] = useState(false)
+
 
 
    const onChangeCategory = (id) => {
       dispatch(setCategoryId(id))
    }
 
-   const fetchPizzas = () => {
-      setLoaning(true);
-      axios
-         .get(
-            `https://63e7a4f1bb28627977157a40.mockapi.io/items${categoryId > 0 ? '?category=' + categoryId : '?'}&sortBy=${sortType}&order=asc`,
+   const getPizzas = async () => {
 
-         )
-         .then((res) => {
-            setItems(res.data);
-            setLoaning(false);
-         });
+
+      try {
+         dispatch(fetchPizzas({
+            categoryId,
+            sortType,
+         }))
+      } catch (error) {
+         console.log("ERROR", error);
+      } finally {
+
+      }
+
+      window.scroll(0, 0)
 
    };
 
@@ -79,10 +82,9 @@ const Home = ({ searchValue }) => {
 
       //
       if (!isSearch.current) {
-         fetchPizzas();
+         getPizzas();
       }
       isSearch.current = false
-      window.scroll(0, 0)
    }, [categoryId, sortType])
 
 
@@ -105,10 +107,12 @@ const Home = ({ searchValue }) => {
             </div>
             <h2 className="content__title">Все пиццы</h2>
             <div className="content__items">
-               {loaning ?
-                  [...new Array(8)].map((_, index) =>
-                     <Skeleton key={index} />
-                  ) : pizzas
+               {status === 'error' ?
+                  (<div><h2>Произошла ошибка</h2></div>) :
+                  (status === 'loading' ?
+                     [...new Array(8)].map((_, index) =>
+                        <Skeleton key={index} />
+                     ) : pizzas)
                }
 
             </div>
