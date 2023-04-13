@@ -6,7 +6,7 @@ const CartEmpry = () => {
    return (
       < div className="container container--cart" >
          <div className="cart cart--empty">
-            <h2>Корзина пустая <icon>😕</icon></h2>
+            <h2>Корзина пустая <span>😕</span></h2>
             <p>
                Вероятней всего, вы не заказывали ещё пиццу.<br />
                Для того, чтобы заказать пиццу, перейди на главную страницу.
@@ -18,7 +18,6 @@ const CartEmpry = () => {
          </div>
       </div >
    )
-
 
 }
 export default CartEmpry;

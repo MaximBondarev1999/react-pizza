@@ -1,5 +1,7 @@
+import { nanoid } from 'nanoid'
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { Link } from 'react-router-dom'
 import { addItems } from '../../redux/slices/cartSlice'
 
 
@@ -7,13 +9,12 @@ export const PizzaBlock = ({ id, title, price, imageUrl, sizes, types, rating })
   const dispatch = useDispatch()
   const cartItem = useSelector((state) => state.cart.items.find((obj) => obj.id === id))
   const typeNames = ['тонкое', 'традиционное']
-  // const [pizzaCount, setPizzaCount] = useState(0)
   const [sizeActive, setSizeActive] = useState(0)
   const [typeActive, setTypeActive] = useState(0)
-  // console.log(id)
+
 
   const addedCount = cartItem ? cartItem.count : 0
-  // console.log(addedCount)
+
 
   const onClickAdd = () => {
     const item = {
@@ -27,20 +28,18 @@ export const PizzaBlock = ({ id, title, price, imageUrl, sizes, types, rating })
     dispatch(addItems(item))
   }
 
-  // function addPizzaCount() {
-  //   setPizzaCount(pizzaCount + 1)
-  // }
-  // console.log(typeNames.props.types)
 
   return (
     <div className="pizza-block__component">
       <div className="pizza-block">
-        <img
-          className="pizza-block__image"
-          src={imageUrl}
-          alt="Pizza"
-        />
-        <h4 className="pizza-block__title">{title}</h4>
+        <Link key={nanoid()} to={`pizza/${id}`}>
+          <img
+            className="pizza-block__image"
+            src={imageUrl}
+            alt="Pizza"
+          />
+          <h4 className="pizza-block__title">{title}</h4>
+        </Link>
         <div className="pizza-block__selector">
           <ul>
             {types.map((type, i) =>
@@ -76,7 +75,6 @@ export const PizzaBlock = ({ id, title, price, imageUrl, sizes, types, rating })
               />
             </svg>
             <span>Добавить</span>
-            {/* {addedCount > 0 && <i>{pizzaCount}</i>} */}
             <i>{addedCount}</i>
           </button>
         </div>

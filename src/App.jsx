@@ -5,6 +5,7 @@ import './App.css';
 import Header from './component/Header';
 import Cart from './component/pages/Cart';
 import Error from './component/pages/Error';
+import FullPizaa from './component/pages/FullPizaa';
 import Home from './component/pages/Home';
 import './scss/app.scss';
 
@@ -24,6 +25,7 @@ function App() {
         <Routes>
           <Route path='/' element={<Home searchValue={searchValue} />} />
           <Route path='/cart' element={<Cart />} />
+          <Route path='/pizza/:id' element={<FullPizaa />} />
           <Route path="*" element={<Error />} />
         </Routes>
       </SearchContext.Provider>
