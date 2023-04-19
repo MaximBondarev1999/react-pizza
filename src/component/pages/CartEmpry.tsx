@@ -2,7 +2,8 @@ import { Link } from "react-router-dom";
 import imaga from "../../img/empty-cart.png";
 
 
-const CartEmpry = () => {
+
+const CartEmpry: React.FC = () => {
    return (
       < div className="container container--cart" >
          <div className="cart cart--empty">

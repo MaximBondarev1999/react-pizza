@@ -10,8 +10,10 @@ import PizzaBlock from "../PizzaBlock/PizzaBlock"
 import Skeleton from "../PizzaBlock/Skeleton"
 import Sort, { sortPosition } from "../Sort"
 
-
-const Home = ({ searchValue }) => {
+type HomeProps = {
+   searchValue: string;
+}
+const Home: React.FC<HomeProps> = ({ searchValue }) => {
    const navigate = useNavigate()
    const dispatch = useDispatch()
    const isSearch = useRef(false)
@@ -24,7 +26,7 @@ const Home = ({ searchValue }) => {
 
 
 
-   const onChangeCategory = (id) => {
+   const onChangeCategory = (id: number) => {
       dispatch(setCategoryId(id))
    }
 
@@ -32,10 +34,12 @@ const Home = ({ searchValue }) => {
 
 
       try {
-         dispatch(fetchPizzas({
-            categoryId,
-            sortType,
-         }))
+         dispatch(
+            // @ts-ignore
+            fetchPizzas({
+               categoryId,
+               sortType,
+            }))
       } catch (error) {
          console.log("ERROR", error);
       } finally {
@@ -90,13 +94,13 @@ const Home = ({ searchValue }) => {
 
 
 
-   const pizzas = items.filter(item => {
+   const pizzas = items.filter((item: any) => {
       if (item.title.toLowerCase().includes(searchValue.toLowerCase())) {
          return true
       }
 
       return false;
-   }).map(item => <PizzaBlock key={nanoid()} title={item.title} price={item.price} imageUrl={item.imageUrl} sizes={item.sizes} id={item.id} types={item.types} />)
+   }).map((item: any) => <PizzaBlock key={nanoid()} title={item.title} price={item.price} imageUrl={item.imageUrl} sizes={item.sizes} id={item.id} types={item.types} />)
 
    return (
       <div className="content">

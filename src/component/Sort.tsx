@@ -3,9 +3,13 @@ import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setSort } from "../redux/slices/filterSlice";
 
+type SortItem = {
+  name: string;
+  sortProperty: string;
+}
 
 
-export const sortPosition =
+export const sortPosition: SortItem[] =
   [{ name: 'Популярности', sortProperty: 'rating' },
   { name: 'Цене', sortProperty: 'price' },
   { name: 'Алфавиту', sortProperty: 'title' },]
@@ -13,19 +17,19 @@ export const sortPosition =
 const Sort = () => {
   const dispatch = useDispatch();
   const sortActive = useSelector((state) => state.filter.sort);
-  const sortRef = useRef()
+  const sortRef = useRef(null)
 
-  const [sortOpen, setSortOpen] = useState(0)
+  const [sortOpen, setSortOpen] = useState<SortItem[]>([])
   const [open, setOpen] = useState(false);
 
 
-  const onClikiListItem = (obj, i) => {
+  const onClikiListItem = (obj: SortItem) => {
     dispatch(setSort(obj))
     setOpen(false)
     setSortOpen(sortPosition)
   }
 
-  const sortList = sortPosition.map((sortName, i) =>
+  const sortList = sortPosition.map((sortName: SortItem, i) =>
     <li
       key={nanoid()}
       className={sortActive.name == sortName.name ? 'active' : ''}
@@ -34,7 +38,7 @@ const Sort = () => {
   )
 
   useEffect(() => {
-    const handleClickOutside = (event) => {
+    const handleClickOutside = (event : any) => {
       if (!event.composedPath().includes(sortRef.current)) {
         setOpen(false)
       }

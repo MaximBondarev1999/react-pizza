@@ -4,15 +4,19 @@ import { Link } from "react-router-dom";
 import { clearItems } from '../../redux/slices/cartSlice';
 import CartEmpry from './CartEmpry';
 
+import React from 'react';
 import CartItem from './CartItem';
 
-const Cart = () => {
+const Cart: React.FC = () => {
 
    const dispatch = useDispatch()
    const { items, totalPrice } = useSelector((state) => state.cart)
    console.log(items)
    const onClickClear = () => {
-      dispatch(clearItems())
+      dispatch(
+         // @ts-ignore
+         clearItems()
+      )
    }
    let sumItems = 0;
    for (let i = 0; i < items.length; i++) {
